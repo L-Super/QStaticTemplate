@@ -47,4 +47,4 @@ jobs:
         if: startsWith(github.event.ref, 'refs/tags/')
         with:
           files: ./build/bin/*.exe
-          token: ${{ secrets.GITHUB_TOKENTOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
