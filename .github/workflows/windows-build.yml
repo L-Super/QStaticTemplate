@@ -1,0 +1,50 @@
+name: windows-build
+
+on:
+  push:
+    branches: ["main"]
+    tags: ["v*"]
+    paths-ignore:
+      - "README.md"
+      - "LICENSE"
+  pull_request:
+    branches: ["main"]
+    paths-ignore:
+      - "README.md"
+      - "LICENSE"
+
+jobs:
+  windows-build:
+    runs-on: windows-latest
+    env: 
+      build_type: 'Release'
+      app_name: 'QTemplateDemo'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt Static
+        uses: orestonce/install-qt-static@v0.4.2
+
+      - name: Configure CMake
+        # Due to Qt MinGW static version, need to use MinGW compiler
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ env.build_type }} -G "MinGW Makefiles" -DCMAKE_RUNTIME_OUTPUT_DIRECTORY="../bin"
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{ env.build_type }}
+
+      - name: Get tag
+        uses: dawidd6/action-get-tag@v1
+        if: startsWith(github.event.ref, 'refs/tags/')
+        id: tag
+
+      - name: Rename
+        if: startsWith(github.event.ref, 'refs/tags/')
+        run: mv ${{github.workspace}}/build/bin/*.exe ${{github.workspace}}/build/bin/${{env.app_name}}_windows_x64_${{steps.tag.outputs.tag}}_portable.exe
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.event.ref, 'refs/tags/')
+        with:
+          files: ./build/bin/*.exe
+          token: ${{ secrets.GITHUB_TOKENTOKEN }}

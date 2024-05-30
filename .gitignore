@@ -1,32 +1,32 @@
-# Prerequisites
-*.d
+# Qt-es
+/.qmake.cache
+/.qmake.stash
+*.pro.user
+*.pro.user.*
+*.moc
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+*build-*
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# QtCreator CMake
+CMakeLists.txt.user*
 
-# Precompiled Headers
-*.gch
-*.pch
+# CLion template
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# User-specific stuff
+.idea/
 
-# Fortran module files
-*.mod
-*.smod
+# CMake
+cmake-build-*/
+build/
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+# version file
+src/version.h
 
-# Executables
-*.exe
-*.out
-*.app
+# rc file
+src/resources/win/app.rc
+
+# macOS cache
+.DS_Store
